@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>贪吃蛇 Snake</title>
+<title>璐悆铔?Snake</title>
 <style>
   :root {
     --bg: #0f1720;
@@ -121,45 +121,39 @@
 </style>
 </head>
 <body>
-  <h1>贪 吃 蛇</h1>
+  <h1>璐?鍚?铔?/h1>
 
   <div class="hud">
-    <div class="score">得分 <span id="score">0</span></div>
-    <div class="best">最高分 <b id="best">0</b></div>
-    <div>速度 <b id="speed" style="color:#38bdf8">1</b></div>
+    <div class="score">寰楀垎 <span id="score">0</span></div>
+    <div class="best">鏈€楂樺垎 <b id="best">0</b></div>
+    <div>閫熷害 <b id="speed" style="color:#38bdf8">1</b></div>
   </div>
 
   <div class="stage">
     <canvas id="game"></canvas>
-    <div class="paused-tag" id="pausedTag">已暂停</div>
+    <div class="paused-tag" id="pausedTag">宸叉殏鍋?/div>
     <div class="overlay" id="overlay">
-      <h2 id="ovTitle">准备好了吗？</h2>
+      <h2 id="ovTitle">鍑嗗濂戒簡鍚楋紵</h2>
       <p id="ovText">
-        <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动<br>
-        <kbd>空格</kbd> 暂停 / 继续 &nbsp;·&nbsp; 手机可滑动屏幕
-      </p>
-      <button class="btn" id="startBtn">开始游戏</button>
+        <kbd>鈫?/kbd> <kbd>鈫?/kbd> <kbd>鈫?/kbd> <kbd>鈫?/kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 绉诲姩<br>
+        <kbd>绌烘牸</kbd> 鏆傚仠 / 缁х画 &nbsp;路&nbsp; 鎵嬫満鍙粦鍔ㄥ睆骞?      </p>
+      <button class="btn" id="startBtn">寮€濮嬫父鎴?/button>
     </div>
   </div>
 
-  <div class="footer">吃到食物变长，撞墙或撞到自己就结束 · 每 5 分提速</div>
+  <div class="footer">鎸夋柟鍚戦敭鍑哄彂 路 鍚冨埌椋熺墿鍙橀暱锛屾挒澧欐垨鎾炲埌鑷繁灏辩粨鏉?路 绌烘牸鏆傚仠</div>
 
 <script>
 (function () {
   "use strict";
 
-  // ====== 配置 ======
-  const COLS = 24;            // 横向格子数
-  const ROWS = 24;            // 纵向格子数
-  const CELL = 20;            // 每格像素
-  const BASE_TICK = 150;      // 初始每步毫秒
-  const MIN_TICK = 60;        // 最快每步毫秒
-  const SPEEDUP_EVERY = 5;    // 每吃几个食物提速
-  const SPEEDUP_STEP = 8;     // 每次提速减少的毫秒
+  // ====== 閰嶇疆 ======
+  const COLS = 24;            // 妯悜鏍煎瓙鏁?  const ROWS = 24;            // 绾靛悜鏍煎瓙鏁?  const CELL = 20;            // 姣忔牸鍍忕礌
+  const BASE_TICK = 400;      // 鍒濆姣忔姣锛堣緝鎱紝閫傚悎鎱㈤€熸搷浣?杈呭姪宸ュ叿锛?  const MIN_TICK = 120;       // 鏈€蹇瘡姝ユ绉?  const SPEEDUP_EVERY = 20;   // 姣忓悆鍑犱釜椋熺墿鎻愰€?  const SPEEDUP_STEP = 20;    // 姣忔鎻愰€熷噺灏戠殑姣
 
   const bestKey = "snake.bestScore";
 
-  // ====== Canvas 初始化（适配高分屏）======
+  // ====== Canvas 鍒濆鍖栵紙閫傞厤楂樺垎灞忥級======
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d");
   const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
@@ -167,7 +161,7 @@
   const H = ROWS * CELL;
 
   function fitCanvas() {
-    // 小屏幕自适应
+    // 灏忓睆骞曡嚜閫傚簲
     const maxW = Math.min(window.innerWidth - 40, 520);
     const scale = Math.min(1, maxW / W);
     canvas.style.width = Math.round(W * scale) + "px";
@@ -188,7 +182,7 @@
   const startBtn = document.getElementById("startBtn");
   const pausedTag = document.getElementById("pausedTag");
 
-  // ====== 游戏状态 ======
+  // ====== 娓告垙鐘舵€?======
   let snake, dir, nextDir, food, score, tick, alive, running, paused, accumulator, lastTime, foodPulse;
 
   let best = Number(localStorage.getItem(bestKey) || 0);
@@ -227,15 +221,14 @@
       }
     }
     if (empty.length === 0) {
-      // 铺满棋盘，通关！
-      food = null;
+      // 閾烘弧妫嬬洏锛岄€氬叧锛?      food = null;
       win();
       return;
     }
     food = empty[Math.floor(Math.random() * empty.length)];
   }
 
-  // ====== 绘制 ======
+  // ====== 缁樺埗 ======
   function drawGrid() {
     ctx.fillStyle = "#16212c";
     ctx.fillRect(0, 0, W, H);
@@ -270,7 +263,7 @@
 
     drawGrid();
 
-    // 食物
+    // 椋熺墿
     if (food) {
       const px = food.x * CELL + CELL / 2;
       const py = food.y * CELL + CELL / 2;
@@ -293,12 +286,10 @@
       ctx.fill();
     }
 
-    // 蛇身（从尾到头，颜色渐变）
-    const n = snake.length;
+    // 铔囪韩锛堜粠灏惧埌澶达紝棰滆壊娓愬彉锛?    const n = snake.length;
     for (let i = n - 1; i >= 0; i--) {
       const s = snake[i];
-      const t = n === 1 ? 0 : i / (n - 1);         // 0 = 头, 1 = 尾
-      const pad = 1.5 + t * 1.2;
+      const t = n === 1 ? 0 : i / (n - 1);         // 0 = 澶? 1 = 灏?      const pad = 1.5 + t * 1.2;
       const x = s.x * CELL + pad;
       const y = s.y * CELL + pad;
       const size = CELL - pad * 2;
@@ -311,14 +302,13 @@
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // 眼睛
+        // 鐪肩潧
         const eye = CELL * 0.12;
         const cx = s.x * CELL + CELL / 2;
         const cy = s.y * CELL + CELL / 2;
-        // 眼睛朝向前进方向，分列两侧
-        const fx = dir.x * CELL * 0.15;   // 前移
+        // 鐪肩潧鏈濆悜鍓嶈繘鏂瑰悜锛屽垎鍒椾袱渚?        const fx = dir.x * CELL * 0.15;   // 鍓嶇Щ
         const fy = dir.y * CELL * 0.15;
-        const sx = dir.y * CELL * 0.19;   // 侧移
+        const sx = dir.y * CELL * 0.19;   // 渚хЩ
         const sy = -dir.x * CELL * 0.19;
         ctx.fillStyle = "#04170c";
         ctx.beginPath();
@@ -326,7 +316,7 @@
         ctx.arc(cx + fx - sx, cy + fy - sy, eye, 0, Math.PI * 2);
         ctx.fill();
       } else {
-        // 从亮绿渐变到青色
+        // 浠庝寒缁挎笎鍙樺埌闈掕壊
         const g = Math.round(200 - 60 * t);
         const b = Math.round(110 + 100 * t);
         ctx.fillStyle = `rgb(${Math.round(74 - 20 * t)}, ${g}, ${b})`;
@@ -336,20 +326,20 @@
     }
   }
 
-  // ====== 逻辑 ======
+  // ====== 閫昏緫 ======
   function step() {
-    // 应用缓冲方向：不允许直接 180° 掉头
+    // 搴旂敤缂撳啿鏂瑰悜锛氫笉鍏佽鐩存帴 180掳 鎺夊ご
     if (snake.length < 2 || !(nextDir.x === -dir.x && nextDir.y === -dir.y)) {
       dir = { x: nextDir.x, y: nextDir.y };
     }
 
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-    // 撞墙
+    // 鎾炲
     if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
       return gameOver();
     }
-    // 撞自己（尾巴将要移动，所以最后一格不算）
+    // 鎾炶嚜宸憋紙灏惧反灏嗚绉诲姩锛屾墍浠ユ渶鍚庝竴鏍间笉绠楋級
     const willEat = food && head.x === food.x && head.y === food.y;
     const limit = willEat ? snake.length : snake.length - 1;
     for (let i = 0; i < limit; i++) {
@@ -366,11 +356,9 @@
       if (score % SPEEDUP_EVERY === 0) {
         tick = Math.max(MIN_TICK, tick - SPEEDUP_STEP);
         speedEl.textContent = Math.min(9, Math.floor((BASE_TICK - tick) / 40) + 1);
-        // 喝彩：得分并提速
-        tick = Math.max(MIN_TICK, tick - SPEEDUP_STEP);
+        // 鍠濆僵锛氬緱鍒嗗苟鎻愰€?        tick = Math.max(MIN_TICK, tick - SPEEDUP_STEP);
         speedEl.textContent = Math.min(9, Math.floor((BASE_TICK - tick) / 40) + 1);
-        // 简单屏幕震动反馈
-        if (typeof canvas.animate === "function") {
+        // 绠€鍗曞睆骞曢渿鍔ㄥ弽棣?        if (typeof canvas.animate === "function") {
           canvas.animate(
             [{ transform: "translate(0,0)" }, { transform: "translate(2px,-1px)" },
              { transform: "translate(-2px,1px)" }, { transform: "translate(0,0)" }],
@@ -394,27 +382,27 @@
     }
     ovTitle.textContent = title;
     overlay.classList.add("over");
-    startBtn.textContent = "再来一局";
+    startBtn.textContent = "鍐嶆潵涓€灞€";
     overlay.classList.remove("hidden");
   }
 
   function gameOver() {
-    lifeLost("游戏结束");
-    ovText.innerHTML = `本次得分 <b class="big">${score}</b><br>最高分 ${best}`;
+    lifeLost("娓告垙缁撴潫");
+    ovText.innerHTML = `鏈寰楀垎 <b class="big">${score}</b><br>鏈€楂樺垎 ${best}`;
   }
 
   function win() {
-    lifeLost("通关啦！");
-    ovText.innerHTML = `填满整个棋盘，得分 <b class="big">${score}</b>`;
+    lifeLost("閫氬叧鍟︼紒");
+    ovText.innerHTML = `濉弧鏁翠釜妫嬬洏锛屽緱鍒?<b class="big">${score}</b>`;
   }
 
-  // ====== 主循环 ======
+  // ====== 涓诲惊鐜?======
   function loop(now) {
     if (!running) return;
     if (!lastTime) lastTime = now;
     let delta = now - lastTime;
     lastTime = now;
-    if (delta > 250) delta = 250; // 切标签页回来不要瞬移
+    if (delta > 250) delta = 250; // 鍒囨爣绛鹃〉鍥炴潵涓嶈鐬Щ
 
     foodPulse += delta / 160;
 
@@ -431,7 +419,7 @@
     requestAnimationFrame(loop);
   }
 
-  // ====== 控制 ======
+  // ====== 鎺у埗 ======
   function start() {
     if (!snake) reset();
     running = true;
@@ -443,6 +431,22 @@
     overlay.classList.add("hidden");
     canvas.focus && canvas.focus();
     requestAnimationFrame(loop);
+  }
+
+  // 寮€濮嬬瓑寰咃細铔囧凡鎽嗗ソ浣嗛潤姝笉鍔紝鎸夋柟鍚戦敭鎵嶇湡姝ｈ繄鍑虹涓€姝?  function waitForInput() {
+    if (!snake) reset();
+    running = false;
+    paused = false;
+    alive = true;
+    lastTime = 0;
+    accumulator = 0;
+    pausedTag.classList.remove("show");
+    startBtn.textContent = "寮€濮嬫父鎴?;
+    ovTitle.textContent = "鍑嗗寮€濮?;
+    ovText.innerHTML = '鎸?<kbd>鈫?/kbd><kbd>鈫?/kbd><kbd>鈫?/kbd><kbd>鈫?/kbd> 浠绘剰鏂瑰悜閿嚭鍙?br>绌烘牸鏆傚仠 / R 閲嶅紑';
+    overlay.classList.remove("over");
+    overlay.classList.remove("hidden");
+    draw();
   }
 
   function restart() {
@@ -458,8 +462,7 @@
   }
 
   function setDir(x, y) {
-    // 不能 180 度掉头
-    if (x === -dir.x && y === -dir.y) return;
+    // 涓嶈兘 180 搴︽帀澶?    if (x === -dir.x && y === -dir.y) return;
     nextDir = { x, y };
   }
 
@@ -477,9 +480,9 @@
       else togglePause();
       return;
     }
-    if (e.key === "Enter" && !running) {
+    if (e.key === "Enter") {
       e.preventDefault();
-      start();
+      if (!running) start();
       return;
     }
     if (e.key === "r" || e.key === "R") {
@@ -489,6 +492,15 @@
     const m = KEYMAP[e.key];
     if (m) {
       e.preventDefault();
+      // 绛夊緟寮€濮嬫椂锛氭寜鏂瑰悜閿洿鎺ヨ捣姝ワ紝骞舵湞璇ユ柟鍚戣繄鍑虹涓€姝?      if (!running) {
+        if (snake) reset();
+        if (!(m[0] === -dir.x && m[1] === -dir.y)) {
+          dir = { x: m[0], y: m[1] };
+          nextDir = { x: m[0], y: m[1] };
+        }
+        start();
+        return;
+      }
       setDir(m[0], m[1]);
     }
   });
@@ -498,7 +510,7 @@
     else start();
   });
 
-  // 触摸滑动
+  // 瑙︽懜婊戝姩
   let touchStart = null;
   canvas.addEventListener("touchstart", (e) => {
     const t = e.changedTouches[0];
@@ -520,13 +532,13 @@
 
   window.addEventListener("resize", fitCanvas);
 
-  // 切到后台自动暂停
+  // 鍒囧埌鍚庡彴鑷姩鏆傚仠
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && running && !paused) togglePause();
   });
 
-  // ====== 启动 ======
-  reset();
+  // ====== 鍚姩 ======
+  waitForInput();
   fitCanvas();
   draw();
 })();

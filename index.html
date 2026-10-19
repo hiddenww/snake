@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>璐悆铔?Snake</title>
+<title>&#36138;&#21507;&#34503; Snake</title>
 <style>
   :root {
     --bg: #0f1720;
@@ -121,39 +121,45 @@
 </style>
 </head>
 <body>
-  <h1>璐?鍚?铔?/h1>
+  <h1>&#36138; &#21507; &#34503;</h1>
 
   <div class="hud">
-    <div class="score">寰楀垎 <span id="score">0</span></div>
-    <div class="best">鏈€楂樺垎 <b id="best">0</b></div>
-    <div>閫熷害 <b id="speed" style="color:#38bdf8">1</b></div>
+    <div class="score">&#24471;&#20998; <span id="score">0</span></div>
+    <div class="best">&#26368;&#39640;&#20998; <b id="best">0</b></div>
+    <div>&#36895;&#24230; <b id="speed" style="color:#38bdf8">1</b></div>
   </div>
 
   <div class="stage">
     <canvas id="game"></canvas>
-    <div class="paused-tag" id="pausedTag">宸叉殏鍋?/div>
+    <div class="paused-tag" id="pausedTag">&#24050;&#26242;&#20572;</div>
     <div class="overlay" id="overlay">
-      <h2 id="ovTitle">鍑嗗濂戒簡鍚楋紵</h2>
+      <h2 id="ovTitle">&#20934;&#22791;&#22909;&#20102;&#21527;&#65311;</h2>
       <p id="ovText">
-        <kbd>鈫?/kbd> <kbd>鈫?/kbd> <kbd>鈫?/kbd> <kbd>鈫?/kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 绉诲姩<br>
-        <kbd>绌烘牸</kbd> 鏆傚仠 / 缁х画 &nbsp;路&nbsp; 鎵嬫満鍙粦鍔ㄥ睆骞?      </p>
-      <button class="btn" id="startBtn">寮€濮嬫父鎴?/button>
+        <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> &#31227;&#21160;<br>
+        <kbd>&#31354;&#26684;</kbd> &#26242;&#20572; / &#32487;&#32493; &nbsp;&#183;&nbsp; &#25163;&#26426;&#21487;&#28369;&#21160;&#23631;&#24149;
+      </p>
+      <button class="btn" id="startBtn">&#24320;&#22987;&#28216;&#25103;</button>
     </div>
   </div>
 
-  <div class="footer">鎸夋柟鍚戦敭鍑哄彂 路 鍚冨埌椋熺墿鍙橀暱锛屾挒澧欐垨鎾炲埌鑷繁灏辩粨鏉?路 绌烘牸鏆傚仠</div>
+  <div class="footer">&#25353;&#26041;&#21521;&#38190;&#20986;&#21457; &#183; &#21507;&#21040;&#39135;&#29289;&#21464;&#38271;&#65292;&#25758;&#22681;&#25110;&#25758;&#21040;&#33258;&#24049;&#23601;&#32467;&#26463; &#183; &#31354;&#26684;&#26242;&#20572;</div>
 
 <script>
 (function () {
   "use strict";
 
-  // ====== 閰嶇疆 ======
-  const COLS = 24;            // 妯悜鏍煎瓙鏁?  const ROWS = 24;            // 绾靛悜鏍煎瓙鏁?  const CELL = 20;            // 姣忔牸鍍忕礌
-  const BASE_TICK = 400;      // 鍒濆姣忔姣锛堣緝鎱紝閫傚悎鎱㈤€熸搷浣?杈呭姪宸ュ叿锛?  const MIN_TICK = 120;       // 鏈€蹇瘡姝ユ绉?  const SPEEDUP_EVERY = 20;   // 姣忓悆鍑犱釜椋熺墿鎻愰€?  const SPEEDUP_STEP = 20;    // 姣忔鎻愰€熷噺灏戠殑姣
+  // ====== \u914d\u7f6e ======
+  const COLS = 24;            // \u6a2a\u5411\u683c\u5b50\u6570
+  const ROWS = 24;            // \u7eb5\u5411\u683c\u5b50\u6570
+  const CELL = 20;            // \u6bcf\u683c\u50cf\u7d20
+  const BASE_TICK = 400;      // \u521d\u59cb\u6bcf\u6b65\u6beb\u79d2\uff08\u8f83\u6162\uff0c\u9002\u5408\u6162\u901f\u64cd\u4f5c/\u8f85\u52a9\u5de5\u5177\uff09
+  const MIN_TICK = 120;       // \u6700\u5feb\u6bcf\u6b65\u6beb\u79d2
+  const SPEEDUP_EVERY = 20;   // \u6bcf\u5403\u51e0\u4e2a\u98df\u7269\u63d0\u901f
+  const SPEEDUP_STEP = 20;    // \u6bcf\u6b21\u63d0\u901f\u51cf\u5c11\u7684\u6beb\u79d2
 
   const bestKey = "snake.bestScore";
 
-  // ====== Canvas 鍒濆鍖栵紙閫傞厤楂樺垎灞忥級======
+  // ====== Canvas \u521d\u59cb\u5316\uff08\u9002\u914d\u9ad8\u5206\u5c4f\uff09======
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d");
   const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
@@ -161,7 +167,7 @@
   const H = ROWS * CELL;
 
   function fitCanvas() {
-    // 灏忓睆骞曡嚜閫傚簲
+    // \u5c0f\u5c4f\u5e55\u81ea\u9002\u5e94
     const maxW = Math.min(window.innerWidth - 40, 520);
     const scale = Math.min(1, maxW / W);
     canvas.style.width = Math.round(W * scale) + "px";
@@ -182,7 +188,7 @@
   const startBtn = document.getElementById("startBtn");
   const pausedTag = document.getElementById("pausedTag");
 
-  // ====== 娓告垙鐘舵€?======
+  // ====== \u6e38\u620f\u72b6\u6001 ======
   let snake, dir, nextDir, food, score, tick, alive, running, paused, accumulator, lastTime, foodPulse;
 
   let best = Number(localStorage.getItem(bestKey) || 0);
@@ -221,14 +227,15 @@
       }
     }
     if (empty.length === 0) {
-      // 閾烘弧妫嬬洏锛岄€氬叧锛?      food = null;
+      // \u94fa\u6ee1\u68cb\u76d8\uff0c\u901a\u5173\uff01
+      food = null;
       win();
       return;
     }
     food = empty[Math.floor(Math.random() * empty.length)];
   }
 
-  // ====== 缁樺埗 ======
+  // ====== \u7ed8\u5236 ======
   function drawGrid() {
     ctx.fillStyle = "#16212c";
     ctx.fillRect(0, 0, W, H);
@@ -263,7 +270,7 @@
 
     drawGrid();
 
-    // 椋熺墿
+    // \u98df\u7269
     if (food) {
       const px = food.x * CELL + CELL / 2;
       const py = food.y * CELL + CELL / 2;
@@ -286,10 +293,12 @@
       ctx.fill();
     }
 
-    // 铔囪韩锛堜粠灏惧埌澶达紝棰滆壊娓愬彉锛?    const n = snake.length;
+    // \u86c7\u8eab\uff08\u4ece\u5c3e\u5230\u5934\uff0c\u989c\u8272\u6e10\u53d8\uff09
+    const n = snake.length;
     for (let i = n - 1; i >= 0; i--) {
       const s = snake[i];
-      const t = n === 1 ? 0 : i / (n - 1);         // 0 = 澶? 1 = 灏?      const pad = 1.5 + t * 1.2;
+      const t = n === 1 ? 0 : i / (n - 1);         // 0 = \u5934, 1 = \u5c3e
+      const pad = 1.5 + t * 1.2;
       const x = s.x * CELL + pad;
       const y = s.y * CELL + pad;
       const size = CELL - pad * 2;
@@ -302,13 +311,14 @@
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // 鐪肩潧
+        // \u773c\u775b
         const eye = CELL * 0.12;
         const cx = s.x * CELL + CELL / 2;
         const cy = s.y * CELL + CELL / 2;
-        // 鐪肩潧鏈濆悜鍓嶈繘鏂瑰悜锛屽垎鍒椾袱渚?        const fx = dir.x * CELL * 0.15;   // 鍓嶇Щ
+        // \u773c\u775b\u671d\u5411\u524d\u8fdb\u65b9\u5411\uff0c\u5206\u5217\u4e24\u4fa7
+        const fx = dir.x * CELL * 0.15;   // \u524d\u79fb
         const fy = dir.y * CELL * 0.15;
-        const sx = dir.y * CELL * 0.19;   // 渚хЩ
+        const sx = dir.y * CELL * 0.19;   // \u4fa7\u79fb
         const sy = -dir.x * CELL * 0.19;
         ctx.fillStyle = "#04170c";
         ctx.beginPath();
@@ -316,7 +326,7 @@
         ctx.arc(cx + fx - sx, cy + fy - sy, eye, 0, Math.PI * 2);
         ctx.fill();
       } else {
-        // 浠庝寒缁挎笎鍙樺埌闈掕壊
+        // \u4ece\u4eae\u7eff\u6e10\u53d8\u5230\u9752\u8272
         const g = Math.round(200 - 60 * t);
         const b = Math.round(110 + 100 * t);
         ctx.fillStyle = `rgb(${Math.round(74 - 20 * t)}, ${g}, ${b})`;
@@ -326,20 +336,20 @@
     }
   }
 
-  // ====== 閫昏緫 ======
+  // ====== \u903b\u8f91 ======
   function step() {
-    // 搴旂敤缂撳啿鏂瑰悜锛氫笉鍏佽鐩存帴 180掳 鎺夊ご
+    // \u5e94\u7528\u7f13\u51b2\u65b9\u5411\uff1a\u4e0d\u5141\u8bb8\u76f4\u63a5 180\u00b0 \u6389\u5934
     if (snake.length < 2 || !(nextDir.x === -dir.x && nextDir.y === -dir.y)) {
       dir = { x: nextDir.x, y: nextDir.y };
     }
 
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-    // 鎾炲
+    // \u649e\u5899
     if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
       return gameOver();
     }
-    // 鎾炶嚜宸憋紙灏惧反灏嗚绉诲姩锛屾墍浠ユ渶鍚庝竴鏍间笉绠楋級
+    // \u649e\u81ea\u5df1\uff08\u5c3e\u5df4\u5c06\u8981\u79fb\u52a8\uff0c\u6240\u4ee5\u6700\u540e\u4e00\u683c\u4e0d\u7b97\uff09
     const willEat = food && head.x === food.x && head.y === food.y;
     const limit = willEat ? snake.length : snake.length - 1;
     for (let i = 0; i < limit; i++) {
@@ -356,9 +366,8 @@
       if (score % SPEEDUP_EVERY === 0) {
         tick = Math.max(MIN_TICK, tick - SPEEDUP_STEP);
         speedEl.textContent = Math.min(9, Math.floor((BASE_TICK - tick) / 40) + 1);
-        // 鍠濆僵锛氬緱鍒嗗苟鎻愰€?        tick = Math.max(MIN_TICK, tick - SPEEDUP_STEP);
-        speedEl.textContent = Math.min(9, Math.floor((BASE_TICK - tick) / 40) + 1);
-        // 绠€鍗曞睆骞曢渿鍔ㄥ弽棣?        if (typeof canvas.animate === "function") {
+        // \u7b80\u5355\u5c4f\u5e55\u9707\u52a8\u53cd\u9988
+        if (typeof canvas.animate === "function") {
           canvas.animate(
             [{ transform: "translate(0,0)" }, { transform: "translate(2px,-1px)" },
              { transform: "translate(-2px,1px)" }, { transform: "translate(0,0)" }],
@@ -382,27 +391,27 @@
     }
     ovTitle.textContent = title;
     overlay.classList.add("over");
-    startBtn.textContent = "鍐嶆潵涓€灞€";
+    startBtn.textContent = "\u518d\u6765\u4e00\u5c40";
     overlay.classList.remove("hidden");
   }
 
   function gameOver() {
-    lifeLost("娓告垙缁撴潫");
-    ovText.innerHTML = `鏈寰楀垎 <b class="big">${score}</b><br>鏈€楂樺垎 ${best}`;
+    lifeLost("\u6e38\u620f\u7ed3\u675f");
+    ovText.innerHTML = `\u672c\u6b21\u5f97\u5206 <b class="big">${score}</b><br>\u6700\u9ad8\u5206 ${best}`;
   }
 
   function win() {
-    lifeLost("閫氬叧鍟︼紒");
-    ovText.innerHTML = `濉弧鏁翠釜妫嬬洏锛屽緱鍒?<b class="big">${score}</b>`;
+    lifeLost("\u901a\u5173\u5566\uff01");
+    ovText.innerHTML = `\u586b\u6ee1\u6574\u4e2a\u68cb\u76d8\uff0c\u5f97\u5206 <b class="big">${score}</b>`;
   }
 
-  // ====== 涓诲惊鐜?======
+  // ====== \u4e3b\u5faa\u73af ======
   function loop(now) {
     if (!running) return;
     if (!lastTime) lastTime = now;
     let delta = now - lastTime;
     lastTime = now;
-    if (delta > 250) delta = 250; // 鍒囨爣绛鹃〉鍥炴潵涓嶈鐬Щ
+    if (delta > 250) delta = 250; // \u5207\u6807\u7b7e\u9875\u56de\u6765\u4e0d\u8981\u77ac\u79fb
 
     foodPulse += delta / 160;
 
@@ -419,7 +428,7 @@
     requestAnimationFrame(loop);
   }
 
-  // ====== 鎺у埗 ======
+  // ====== \u63a7\u5236 ======
   function start() {
     if (!snake) reset();
     running = true;
@@ -433,7 +442,8 @@
     requestAnimationFrame(loop);
   }
 
-  // 寮€濮嬬瓑寰咃細铔囧凡鎽嗗ソ浣嗛潤姝笉鍔紝鎸夋柟鍚戦敭鎵嶇湡姝ｈ繄鍑虹涓€姝?  function waitForInput() {
+  // \u5f00\u59cb\u7b49\u5f85\uff1a\u86c7\u5df2\u6446\u597d\u4f46\u9759\u6b62\u4e0d\u52a8\uff0c\u6309\u65b9\u5411\u952e\u624d\u771f\u6b63\u8fc8\u51fa\u7b2c\u4e00\u6b65
+  function waitForInput() {
     if (!snake) reset();
     running = false;
     paused = false;
@@ -441,9 +451,9 @@
     lastTime = 0;
     accumulator = 0;
     pausedTag.classList.remove("show");
-    startBtn.textContent = "寮€濮嬫父鎴?;
-    ovTitle.textContent = "鍑嗗寮€濮?;
-    ovText.innerHTML = '鎸?<kbd>鈫?/kbd><kbd>鈫?/kbd><kbd>鈫?/kbd><kbd>鈫?/kbd> 浠绘剰鏂瑰悜閿嚭鍙?br>绌烘牸鏆傚仠 / R 閲嶅紑';
+    startBtn.textContent = "\u5f00\u59cb\u6e38\u620f";
+    ovTitle.textContent = "\u51c6\u5907\u5f00\u59cb";
+    ovText.innerHTML = '\u6309 <kbd>\u2191</kbd><kbd>\u2193</kbd><kbd>\u2190</kbd><kbd>\u2192</kbd> \u4efb\u610f\u65b9\u5411\u952e\u51fa\u53d1<br>\u7a7a\u683c\u6682\u505c / R \u91cd\u5f00';
     overlay.classList.remove("over");
     overlay.classList.remove("hidden");
     draw();
@@ -462,7 +472,8 @@
   }
 
   function setDir(x, y) {
-    // 涓嶈兘 180 搴︽帀澶?    if (x === -dir.x && y === -dir.y) return;
+    // \u4e0d\u80fd 180 \u5ea6\u6389\u5934
+    if (x === -dir.x && y === -dir.y) return;
     nextDir = { x, y };
   }
 
@@ -492,7 +503,8 @@
     const m = KEYMAP[e.key];
     if (m) {
       e.preventDefault();
-      // 绛夊緟寮€濮嬫椂锛氭寜鏂瑰悜閿洿鎺ヨ捣姝ワ紝骞舵湞璇ユ柟鍚戣繄鍑虹涓€姝?      if (!running) {
+      // \u7b49\u5f85\u5f00\u59cb\u65f6\uff1a\u6309\u65b9\u5411\u952e\u76f4\u63a5\u8d77\u6b65\uff0c\u5e76\u671d\u8be5\u65b9\u5411\u8fc8\u51fa\u7b2c\u4e00\u6b65
+      if (!running) {
         if (snake) reset();
         if (!(m[0] === -dir.x && m[1] === -dir.y)) {
           dir = { x: m[0], y: m[1] };
@@ -510,7 +522,7 @@
     else start();
   });
 
-  // 瑙︽懜婊戝姩
+  // \u89e6\u6478\u6ed1\u52a8
   let touchStart = null;
   canvas.addEventListener("touchstart", (e) => {
     const t = e.changedTouches[0];
@@ -532,12 +544,12 @@
 
   window.addEventListener("resize", fitCanvas);
 
-  // 鍒囧埌鍚庡彴鑷姩鏆傚仠
+  // \u5207\u5230\u540e\u53f0\u81ea\u52a8\u6682\u505c
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && running && !paused) togglePause();
   });
 
-  // ====== 鍚姩 ======
+  // ====== \u542f\u52a8 ======
   waitForInput();
   fitCanvas();
   draw();
